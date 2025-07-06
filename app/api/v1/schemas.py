@@ -14,12 +14,10 @@ class RestaurantBase(BaseModel):
     Attributes:
         name: Name of the restaurant.
         cuisine: Type of cuisine served.
-        price_level: Price indicator, 1 (cheap) to 3 (expensive).
         rating: Customer rating 0.0–5.0.
     """
     name: str = Field(..., description="Restaurant name")
     cuisine: Optional[str] = Field(None, description="Cuisine type")
-    price_level: int = Field(..., ge=1, le=3, description="Price level")
     rating: float = Field(..., ge=0.0, le=5.0, description="Average rating")
 
 
@@ -45,7 +43,6 @@ class RestaurantUpdate(BaseModel):
     """
     name: Optional[str] = Field(None, description="Restaurant name")
     cuisine: Optional[str] = Field(None, description="Cuisine type")
-    price_level: Optional[int] = Field(None, ge=1, le=3, description="Price level")
     rating: Optional[float] = Field(None, ge=0.0, le=5.0, description="Average rating")
 
     model_config = ConfigDict(from_attributes=True)
