@@ -21,3 +21,15 @@ SessionLocal = sessionmaker(
 
 # Base class for models
 Base = declarative_base()
+
+
+# Dependency to provide a database session
+def get_db():
+    """
+    Dependency to provide a database session and close it after use.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
