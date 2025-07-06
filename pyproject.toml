@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "forkcast"
+version = "0.1.0"
+description = "A simple FastAPI-based restaurant recommendation system."
+authors = ["Marc Xu <marc.xuzhou@gmail.com>"]
+readme = "README.md"
+
+[[tool.poetry.packages]]
+include = "app"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.14"
+uvicorn = "^0.35.0"
+sqlalchemy = "^2.0.41"
+pydantic = "^2.11.7"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
+black = "^25.1.0"
+ruff = "^0.12.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
