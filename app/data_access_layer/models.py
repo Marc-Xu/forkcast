@@ -3,7 +3,7 @@ Defines ORM models for the application.
 """
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
-from app.database import Base
+from app.data_access_layer.database import Base
 
 
 class Restaurant(Base):
