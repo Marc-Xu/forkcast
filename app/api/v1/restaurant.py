@@ -1,6 +1,7 @@
 """
 Defines all /restaurants endpoints via APIRouter.
 """
+
 from typing import List
 from fastapi import APIRouter
 from fastapi import Depends, Query
@@ -47,7 +48,9 @@ def list_restaurants(
     return service.list_restaurants(skip=skip, limit=limit)
 
 
-@router.get("/{restaurant_id}", response_model=Restaurant, summary="Get restaurant by ID")
+@router.get(
+    "/{restaurant_id}", response_model=Restaurant, summary="Get restaurant by ID"
+)
 def get_restaurant(
     restaurant_id: int,
     service: RestaurantService = Depends(get_restaurant_service),
@@ -58,7 +61,9 @@ def get_restaurant(
     return service.get_restaurant(restaurant_id)
 
 
-@router.patch("/{restaurant_id}", response_model=Restaurant, summary="Update restaurant")
+@router.patch(
+    "/{restaurant_id}", response_model=Restaurant, summary="Update restaurant"
+)
 def patch_restaurant(
     restaurant_id: int,
     payload: RestaurantUpdate,
@@ -67,10 +72,14 @@ def patch_restaurant(
     """
     Partially update a restaurant via service.
     """
-    return service.update_restaurant(restaurant_id, payload.model_dump(exclude_unset=True))
+    return service.update_restaurant(
+        restaurant_id, payload.model_dump(exclude_unset=True)
+    )
 
 
-@router.delete("/{restaurant_id}", response_model=Restaurant, summary="Delete restaurant")
+@router.delete(
+    "/{restaurant_id}", response_model=Restaurant, summary="Delete restaurant"
+)
 def delete_restaurant(
     restaurant_id: int,
     service: RestaurantService = Depends(get_restaurant_service),

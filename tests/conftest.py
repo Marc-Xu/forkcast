@@ -15,7 +15,9 @@ from app.main import app
 def db_engine():
     fd, path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
-    engine = create_engine(f"sqlite:///{path}", connect_args={"check_same_thread": False})
+    engine = create_engine(
+        f"sqlite:///{path}", connect_args={"check_same_thread": False}
+    )
     Base.metadata.create_all(bind=engine)
     try:
         yield engine

@@ -1,6 +1,7 @@
 """
 Generic repository for data-access operations.
 """
+
 from typing import TypeVar, Generic, Type, List, Optional, Dict, Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -15,6 +16,7 @@ class GeneralRepository(Generic[Model]):
     """
     Provides CRUD operations abstracted from service and HTTP layers.
     """
+
     def __init__(self, db: Session, model: Type[Model]):
         self.db = db
         self.model = model

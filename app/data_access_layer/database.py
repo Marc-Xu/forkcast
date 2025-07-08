@@ -1,6 +1,7 @@
 """
 Setup SQLAlchemy engine and session factory.
 """
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.config import Settings

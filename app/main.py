@@ -1,6 +1,7 @@
 """
 FastAPI application instantiation and route definitions, leveraging service layer.
 """
+
 import logging
 
 from fastapi import FastAPI, HTTPException, Request
@@ -13,9 +14,7 @@ from app.exceptions import NotFoundError, ValidationError
 
 # Initialize settings and logging
 settings = Settings()
-logging.basicConfig(
-    level=logging.DEBUG if settings.debug else logging.INFO
-)
+logging.basicConfig(level=logging.DEBUG if settings.debug else logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create all database tables

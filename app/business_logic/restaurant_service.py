@@ -1,6 +1,7 @@
 """
 Business-logic layer orchestrating restaurant use-cases.
 """
+
 from typing import List, Any
 from sqlalchemy.orm import Session
 from app.data_access_layer.general_repository import GeneralRepository
@@ -12,6 +13,7 @@ class RestaurantService:
     """
     Orchestrates business rules and use-cases for Restaurant.
     """
+
     def __init__(self, db: Session):
         self.repo = GeneralRepository(db=db, model=Restaurant)
 
@@ -33,7 +35,9 @@ class RestaurantService:
     def create_restaurant(self, restaurant_data: dict[str, Any]) -> Restaurant:
         # Business rule: name must be unique
         if self.repo.find_by(name=restaurant_data["name"]):
-            raise ValidationError(f"A restaurant named '{restaurant_data["name"]}' already exists")
+            raise ValidationError(
+                f"A restaurant named '{restaurant_data["name"]}' already exists"
+            )
         return self.repo.add(**restaurant_data)
 
     def update_restaurant(self, restaurant_id: int, data: dict[str, Any]) -> Restaurant:

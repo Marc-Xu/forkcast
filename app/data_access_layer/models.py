@@ -1,6 +1,7 @@
 """
 Defines ORM models for the application.
 """
+
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
 from app.data_access_layer.database import Base
@@ -16,6 +17,7 @@ class Restaurant(Base):
         cuisine: Cuisine type.
         rating: Average rating (0.0–5.0).
     """
+
     __tablename__ = "restaurants"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
