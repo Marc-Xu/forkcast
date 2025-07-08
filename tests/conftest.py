@@ -1,5 +1,3 @@
-import os
-import tempfile
 
 import pytest
 from fastapi.testclient import TestClient
@@ -10,21 +8,16 @@ from app.data_access_layer.database import Base
 from app.main import app
 
 
-# Create a temporary SQLite database for tests
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def db_engine():
-    fd, path = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
     engine = create_engine(
-        f"sqlite:///{path}", connect_args={"check_same_thread": False}
+        "sqlite:///:memory:", connect_args={"check_same_thread": False}
     )
     Base.metadata.create_all(bind=engine)
     try:
         yield engine
     finally:
         engine.dispose()
-        if os.path.exists(path):
-            os.remove(path)
 
 
 @pytest.fixture

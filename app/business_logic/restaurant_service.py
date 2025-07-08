@@ -1,7 +1,8 @@
 """
 Business-logic layer orchestrating restaurant use-cases.
 """
-
+import random
+from collections import defaultdict
 from typing import List, Any
 from sqlalchemy.orm import Session
 from app.data_access_layer.general_repository import GeneralRepository
@@ -52,3 +53,39 @@ class RestaurantService:
         if not deleted:
             raise NotFoundError(f"Restaurant {restaurant_id} not found")
         return deleted
+
+    def get_diverse_recommendations(self, limit: int = 5) -> List[Restaurant]:
+        """
+        Return a list of `limit` restaurants ensuring cuisine diversity.
+
+        This method groups all restaurants by cuisine, randomly selects cuisines
+        (with repetition if `limit` exceeds the number of cuisines), then picks
+        one random restaurant from each selected cuisine, removing it from that
+        group to avoid duplicates.
+
+        Args:
+            limit: The number of restaurants to recommend.
+
+        Returns:
+            A list of Restaurant objects sampled to maximize cuisine variety.
+        """
+
+        all_restaurants = self.repo.list()
+        restaurant_by_cuisine = {}
+        for restaurant in all_restaurants:
+            restaurant_by_cuisine.setdefault(restaurant.cuisine, []).append(restaurant)
+        cuisines = random.choices(list(restaurant_by_cuisine.keys()), k=limit)
+        recommendations = []
+        while restaurant_by_cuisine and len(recommendations) < limit:
+            for cuisine in cuisines:
+                if cuisine not in restaurant_by_cuisine:
+                    continue
+                if not restaurant_by_cuisine[cuisine]:
+                    del restaurant_by_cuisine[cuisine]
+                    continue
+                restaurant = random.choice(restaurant_by_cuisine[cuisine])
+                restaurant_by_cuisine[cuisine].remove(restaurant)
+                recommendations.append(restaurant)
+                if len(recommendations) == limit:
+                    break
+        return recommendations

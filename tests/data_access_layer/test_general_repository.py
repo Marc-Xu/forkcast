@@ -29,9 +29,9 @@ def test_list_pagination(repo):
 
 def test_find_by(repo):
     repo.add(name="Unique", cuisine="U", rating=1.1)
-    found: Restaurant = repo.find_by(name="Unique")
+    found: Restaurant = repo.find_by(name="Unique")[0]
     assert found is not None and found.name == "Unique"
-    assert repo.find_by(name="DoesNotExist") is None
+    assert not repo.find_by(name="DoesNotExist")
 
 
 def test_update(repo):
