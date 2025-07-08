@@ -1,10 +1,10 @@
 """
 Business-logic layer orchestrating restaurant use-cases.
 """
-from typing import List
+from typing import List, Any
 from sqlalchemy.orm import Session
 from app.data_access_layer.general_repository import GeneralRepository
-from app.api.v1.schemas import RestaurantCreate, RestaurantUpdate
+from app.api.v1.schemas import RestaurantCreate
 from app.data_access_layer.models import Restaurant
 
 
@@ -19,10 +19,16 @@ class RestaurantService:
         return self.repo.list(skip=skip, limit=limit)
 
     def get_restaurant(self, restaurant_id: int) -> Restaurant:
-        obj = self.repo.get(restaurant_id)
-        if not obj:
+        restaurant = self.repo.get(restaurant_id)
+        if not restaurant:
             raise ValueError(f"Restaurant {restaurant_id} not found")
-        return obj
+        return restaurant
+
+    def get_restaurant_by_attributes(self, attributes: dict[str, Any]) -> Restaurant:
+        restaurant = self.repo.find_by(**attributes)
+        if not restaurant:
+            raise ValueError(f"Restaurant with attributes {attributes} not found")
+        return restaurant
 
     def create_restaurant(self, restaurant: RestaurantCreate) -> Restaurant:
         # Business rule: name must be unique
@@ -34,8 +40,7 @@ class RestaurantService:
             rating=restaurant.rating,
         )
 
-    def update_restaurant(self, restaurant_id: int, restaurant: RestaurantUpdate) -> Restaurant:
-        data = restaurant.model_dump(exclude_unset=True)
+    def update_restaurant(self, restaurant_id: int, data: dict[str, Any]) -> Restaurant:
         updated = self.repo.update(restaurant_id, data)
         if not updated:
             raise ValueError(f"Restaurant {restaurant_id} not found")

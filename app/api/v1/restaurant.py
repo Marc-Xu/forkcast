@@ -67,7 +67,7 @@ def patch_restaurant(
     """
     Partially update a restaurant via service.
     """
-    return service.update_restaurant(restaurant_id, payload)
+    return service.update_restaurant(restaurant_id, payload.model_dump(exclude_unset=True))
 
 
 @router.delete("/{restaurant_id}", response_model=Restaurant, summary="Delete restaurant")
