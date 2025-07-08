@@ -30,7 +30,9 @@ class GeneralRepository(Generic[Model]):
         """Get an object by its ID."""
         return self.db.get(self.model, identifier)
 
-    def find_by(self, limit: int = 10, order_by: ColumnElement = None, **filters: Any) -> List[Model]:
+    def find_by(
+        self, limit: int = 10, order_by: ColumnElement = None, **filters: Any
+    ) -> List[Model]:
         """
         Fetch up to `limit` objects matching provided filters.
         Example: repo.find_by(limit=2, name="Sushi Bar")

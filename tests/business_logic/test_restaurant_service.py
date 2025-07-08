@@ -29,7 +29,9 @@ def test_get_restaurant_by_attributes(service):
     data2 = {"name": "R2", "cuisine": "special", "rating": 4.3}
     service.create_restaurant(data1)
     service.create_restaurant(data2)
-    top = service.get_restaurant_by_attributes({"cuisine": "special"}, limit=2, order_by_rating=True)
+    top = service.get_restaurant_by_attributes(
+        {"cuisine": "special"}, limit=2, order_by_rating=True
+    )
     assert top is not None and len(top) == 2
     assert top[0].name == "R1"
     assert top[1].name == "R2"

@@ -48,7 +48,9 @@ def list_restaurants(
     return service.list_restaurants(skip=skip, limit=limit)
 
 
-@router.get("/top", response_model=List[Restaurant], summary="Top N restaurants by cuisine")
+@router.get(
+    "/top", response_model=List[Restaurant], summary="Top N restaurants by cuisine"
+)
 def get_top_by_cuisine(
     cuisine: str = Query(..., description="Cuisine to filter by"),
     limit: int = Query(3, ge=1, description="Number of top restaurants to return"),
@@ -57,10 +59,16 @@ def get_top_by_cuisine(
     """
     Return the top `limit` restaurants for a given cuisine, ordered by rating.
     """
-    return service.get_restaurant_by_attributes(attributes={"cuisine": cuisine}, limit=limit, order_by_rating=True)
+    return service.get_restaurant_by_attributes(
+        attributes={"cuisine": cuisine}, limit=limit, order_by_rating=True
+    )
 
 
-@router.get("/recommend", response_model=List[Restaurant], summary="Diverse restaurant recommendations")
+@router.get(
+    "/recommend",
+    response_model=List[Restaurant],
+    summary="Diverse restaurant recommendations",
+)
 def get_diverse_recommendations(
     limit: int = Query(5, ge=1, description="Number of restaurants to recommend"),
     service: RestaurantService = Depends(get_restaurant_service),
