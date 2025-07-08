@@ -26,8 +26,9 @@ class RestaurantService:
             raise NotFoundError(f"Restaurant {restaurant_id} not found")
         return restaurant
 
-    def get_restaurant_by_attributes(self, attributes: dict[str, Any], limit: int = 10) -> List[Restaurant]:
-        restaurants = self.repo.find_by(limit=limit, **attributes)
+    def get_restaurant_by_attributes(self, attributes: dict[str, Any], limit: int = 10, order_by_rating: bool = False) -> List[Restaurant]:
+        order_by = Restaurant.rating.desc() if order_by_rating else None
+        restaurants = self.repo.find_by(limit=limit, order_by=order_by, **attributes)
         if not restaurants:
             raise NotFoundError(f"Restaurants with attributes {attributes} not found")
         return restaurants

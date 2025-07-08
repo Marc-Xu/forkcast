@@ -3,7 +3,7 @@ Generic repository for data-access operations.
 """
 
 from typing import TypeVar, Generic, Type, List, Optional, Dict, Any
-from sqlalchemy import select
+from sqlalchemy import select, ColumnElement
 from sqlalchemy.orm import Session
 
 from app.data_access_layer.database import Base
@@ -30,12 +30,12 @@ class GeneralRepository(Generic[Model]):
         """Get an object by its ID."""
         return self.db.get(self.model, identifier)
 
-    def find_by(self, limit: int = 10, **filters: Any) -> List[Model]:
+    def find_by(self, limit: int = 10, order_by: ColumnElement = None, **filters: Any) -> List[Model]:
         """
         Fetch up to `limit` objects matching provided filters.
         Example: repo.find_by(limit=2, name="Sushi Bar")
         """
-        stmt = select(self.model).filter_by(**filters).limit(limit)
+        stmt = select(self.model).filter_by(**filters).order_by(order_by).limit(limit)
         return list(self.db.scalars(stmt).all())
 
     def add(self, **fields: Any) -> Model:
