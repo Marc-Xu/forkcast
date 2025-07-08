@@ -32,7 +32,7 @@ def create_restaurant(
     """
     Create a new restaurant using service layer.
     """
-    return service.create_restaurant(payload)
+    return service.create_restaurant(payload.model_dump(exclude_unset=True))
 
 
 @router.get("/", response_model=List[Restaurant], summary="List restaurants")

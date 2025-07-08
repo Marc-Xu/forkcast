@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 from app.config import Settings
 from app.data_access_layer.database import engine, Base
 from app.api.v1.restaurant import router as restaurant_router
-
+from app.exceptions import NotFoundError, ValidationError
 
 # Initialize settings and logging
 settings = Settings()
@@ -29,6 +29,22 @@ app = FastAPI(
 
 
 # Register exception handlers
+@app.exception_handler(NotFoundError)
+async def not_found_handler(_: Request, exc: NotFoundError):
+    """
+    Handle cases where a resource is not found.
+    """
+    raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(_: Request, exc: ValidationError):
+    """
+    Handle request validation errors raised in service layer.
+    """
+    raise HTTPException(status_code=422, detail=str(exc))
+
+
 @app.exception_handler(ValueError)
 async def value_error_handler(_: Request, exc: ValueError):
     """
@@ -63,7 +79,7 @@ def health() -> dict:
 
 app.include_router(restaurant_router, prefix="/restaurants", tags=["Restaurants"])
 
-
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=settings.debug)
