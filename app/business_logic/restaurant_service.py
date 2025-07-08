@@ -4,7 +4,6 @@ Business-logic layer orchestrating restaurant use-cases.
 from typing import List, Any
 from sqlalchemy.orm import Session
 from app.data_access_layer.general_repository import GeneralRepository
-from app.api.v1.schemas import RestaurantCreate
 from app.data_access_layer.models import Restaurant
 
 
@@ -30,15 +29,11 @@ class RestaurantService:
             raise ValueError(f"Restaurant with attributes {attributes} not found")
         return restaurant
 
-    def create_restaurant(self, restaurant: RestaurantCreate) -> Restaurant:
+    def create_restaurant(self, restaurant_data: dict[str, Any]) -> Restaurant:
         # Business rule: name must be unique
-        if self.repo.find_by(name=restaurant.name):
-            raise ValueError(f"A restaurant named '{restaurant.name}' already exists")
-        return self.repo.add(
-            name=restaurant.name,
-            cuisine=restaurant.cuisine,
-            rating=restaurant.rating,
-        )
+        if self.repo.find_by(name=restaurant_data["name"]):
+            raise ValueError(f"A restaurant named '{restaurant_data["name"]}' already exists")
+        return self.repo.add(**restaurant_data)
 
     def update_restaurant(self, restaurant_id: int, data: dict[str, Any]) -> Restaurant:
         updated = self.repo.update(restaurant_id, data)
