@@ -26,11 +26,11 @@ class RestaurantService:
             raise NotFoundError(f"Restaurant {restaurant_id} not found")
         return restaurant
 
-    def get_restaurant_by_attributes(self, attributes: dict[str, Any]) -> Restaurant:
-        restaurant = self.repo.find_by(**attributes)
-        if not restaurant:
-            raise NotFoundError(f"Restaurant with attributes {attributes} not found")
-        return restaurant
+    def get_restaurant_by_attributes(self, attributes: dict[str, Any], limit: int = 10) -> List[Restaurant]:
+        restaurants = self.repo.find_by(limit=limit, **attributes)
+        if not restaurants:
+            raise NotFoundError(f"Restaurants with attributes {attributes} not found")
+        return restaurants
 
     def create_restaurant(self, restaurant_data: dict[str, Any]) -> Restaurant:
         # Business rule: name must be unique
