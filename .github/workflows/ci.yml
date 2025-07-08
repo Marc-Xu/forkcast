@@ -24,7 +24,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        poetry install --no-root
+        poetry install
 
     - name: Lint with Black
       run: |
@@ -32,7 +32,7 @@ jobs:
 
     - name: Lint with Ruff
       run: |
-        poetry run ruff .
+        poetry run ruff check .
 
     - name: Run tests
       run: |
