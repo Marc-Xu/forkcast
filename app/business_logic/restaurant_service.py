@@ -3,7 +3,7 @@ Business-logic layer orchestrating restaurant use-cases.
 """
 from typing import List
 from sqlalchemy.orm import Session
-from app.data_access_layer.restaurant_repository import RestaurantRepository
+from app.data_access_layer.general_repository import GeneralRepository
 from app.api.v1.schemas import RestaurantCreate, RestaurantUpdate
 from app.data_access_layer.models import Restaurant
 
@@ -13,7 +13,7 @@ class RestaurantService:
     Orchestrates business rules and use-cases for Restaurant.
     """
     def __init__(self, db: Session):
-        self.repo = RestaurantRepository(db)
+        self.repo = GeneralRepository(db=db, model=Restaurant)
 
     def list_restaurants(self, skip: int = 0, limit: int = 100) -> List[Restaurant]:
         return self.repo.list(skip=skip, limit=limit)
